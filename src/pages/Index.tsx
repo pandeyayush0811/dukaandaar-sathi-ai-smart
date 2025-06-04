@@ -13,17 +13,62 @@ import {
   Calendar,
   IndianRupee,
   Scan,
-  Plus
+  Plus,
+  LogOut,
+  User
 } from "lucide-react";
 import Dashboard from "@/components/Dashboard";
 import ProductManagement from "@/components/ProductManagement";
 import BillingSystem from "@/components/BillingSystem";
 import BarcodeScanner from "@/components/BarcodeScanner";
 import ReportsView from "@/components/ReportsView";
+import { AuthModal } from "@/components/AuthModal";
+import { useAuth } from "@/components/AuthProvider";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showScanner, setShowScanner] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { user, signOut, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
+        <div className="text-center">
+          <Package className="w-16 h-16 mx-auto text-blue-600 mb-4" />
+          <p className="text-gray-600">Loading DukaanBuddy...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
+          <Card className="w-full max-w-md">
+            <CardHeader className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Package className="w-8 h-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl">Welcome to DukaanBuddy</CardTitle>
+              <p className="text-gray-600">आपका स्मार्ट दुकान साथी</p>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                onClick={() => setShowAuthModal(true)}
+                className="w-full bg-gradient-to-r from-blue-600 to-green-600"
+                size="lg"
+              >
+                Get Started
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+        <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
+      </>
+    );
+  }
 
   if (showScanner) {
     return <BarcodeScanner onClose={() => setShowScanner(false)} />;
@@ -44,14 +89,24 @@ const Index = () => {
                 <p className="text-sm text-gray-600">आपका स्मार्ट दुकान साथी</p>
               </div>
             </div>
-            <Button 
-              onClick={() => setShowScanner(true)}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
-              size="lg"
-            >
-              <Scan className="w-5 h-5 mr-2" />
-              Scan Product
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button 
+                onClick={() => setShowScanner(true)}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                size="lg"
+              >
+                <Scan className="w-5 h-5 mr-2" />
+                Scan Product
+              </Button>
+              <Button
+                variant="outline"
+                onClick={signOut}
+                size="sm"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -110,17 +165,10 @@ const Index = () => {
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-orange-200">
                     <div>
-                      <p className="font-medium text-gray-900">Maggi Noodles 2-Min</p>
-                      <p className="text-sm text-gray-600">Only 5 packets left</p>
+                      <p className="font-medium text-gray-900">Low stock items will appear here</p>
+                      <p className="text-sm text-gray-600">Add products to see alerts</p>
                     </div>
-                    <Badge variant="destructive">Low Stock</Badge>
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-orange-200">
-                    <div>
-                      <p className="font-medium text-gray-900">Biscuit Pack</p>
-                      <p className="text-sm text-gray-600">Expires in 3 days</p>
-                    </div>
-                    <Badge variant="secondary">Near Expiry</Badge>
+                    <Badge variant="secondary">Coming Soon</Badge>
                   </div>
                 </CardContent>
               </Card>
