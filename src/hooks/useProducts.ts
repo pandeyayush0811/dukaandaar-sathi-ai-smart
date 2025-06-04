@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/components/AuthProvider";
 
 export interface Product {
   id: string;
@@ -21,6 +22,7 @@ export interface Product {
 export function useProducts() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const {
     data: products = [],
@@ -41,9 +43,14 @@ export function useProducts() {
 
   const addProductMutation = useMutation({
     mutationFn: async (product: Omit<Product, "id" | "created_at" | "updated_at">) => {
+      if (!user) throw new Error("User not authenticated");
+      
       const { data, error } = await supabase
         .from("products")
-        .insert([product])
+        .insert([{
+          ...product,
+          user_id: user.id
+        }])
         .select()
         .single();
 

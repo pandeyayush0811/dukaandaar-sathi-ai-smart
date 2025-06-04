@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/components/AuthProvider";
 
 export interface Sale {
   id: string;
@@ -29,6 +30,7 @@ export interface SaleItem {
 export function useSales() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const {
     data: sales = [],
@@ -66,6 +68,8 @@ export function useSales() {
         total_price: number;
       }>;
     }) => {
+      if (!user) throw new Error("User not authenticated");
+
       const { data: sale, error: saleError } = await supabase
         .from("sales")
         .insert([{
@@ -74,6 +78,7 @@ export function useSales() {
           total_amount: saleData.total_amount,
           payment_method: saleData.payment_method,
           status: "completed",
+          user_id: user.id,
         }])
         .select()
         .single();
