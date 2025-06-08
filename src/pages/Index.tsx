@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   BarChart3, 
   Package, 
@@ -22,53 +21,10 @@ import ImprovedBarcodeScanner from "@/components/ImprovedBarcodeScanner";
 import ReportsView from "@/components/ReportsView";
 import UserProfile from "@/components/UserProfile";
 import { AppSidebar } from "@/components/AppSidebar";
-import { AuthModal } from "@/components/AuthModal";
-import { useAuth } from "@/components/AuthProvider";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showScanner, setShowScanner] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
-        <div className="text-center">
-          <Package className="w-16 h-16 mx-auto text-blue-600 mb-4" />
-          <p className="text-gray-600">Loading DukaanBuddy...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
-          <Card className="w-full max-w-md">
-            <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Package className="w-8 h-8 text-white" />
-              </div>
-              <CardTitle className="text-2xl">Welcome to DukaanBuddy</CardTitle>
-              <p className="text-gray-600">आपका स्मार्ट दुकान साथी</p>
-            </CardHeader>
-            <CardContent>
-              <Button 
-                onClick={() => setShowAuthModal(true)}
-                className="w-full bg-gradient-to-r from-blue-600 to-green-600"
-                size="lg"
-              >
-                Get Started
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-        <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
-      </>
-    );
-  }
 
   if (showScanner) {
     return <ImprovedBarcodeScanner onClose={() => setShowScanner(false)} />;

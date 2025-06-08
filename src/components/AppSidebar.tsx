@@ -19,11 +19,8 @@ import {
   ShoppingCart, 
   TrendingUp, 
   AlertTriangle,
-  User,
-  LogOut
+  User
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/components/AuthProvider";
 
 interface AppSidebarProps {
   activeTab: string;
@@ -31,8 +28,7 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
-  const { collapsed } = useSidebar();
-  const { signOut, user } = useAuth();
+  const { open } = useSidebar();
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: BarChart3 },
@@ -44,9 +40,9 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
   ];
 
   return (
-    <Sidebar className={collapsed ? "w-16" : "w-64"} collapsible>
+    <Sidebar className={open ? "w-64" : "w-16"}>
       <SidebarHeader className="p-4">
-        {!collapsed && (
+        {open && (
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
               <Package className="w-5 h-5 text-white" />
@@ -57,7 +53,7 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
             </div>
           </div>
         )}
-        {collapsed && (
+        {!open && (
           <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center mx-auto">
             <Package className="w-5 h-5 text-white" />
           </div>
@@ -77,7 +73,7 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
                     className="w-full justify-start"
                   >
                     <item.icon className="w-5 h-5" />
-                    {!collapsed && <span>{item.label}</span>}
+                    {open && <span>{item.label}</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -87,34 +83,13 @@ export function AppSidebar({ activeTab, onTabChange }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter className="p-4">
-        {!collapsed && (
+        {open && (
           <div className="space-y-3">
             <div className="text-sm">
-              <p className="font-medium text-gray-900 truncate">
-                {user?.email}
-              </p>
+              <p className="font-medium text-gray-900">Shop Owner</p>
               <p className="text-gray-600 text-xs">Shopkeeper</p>
             </div>
-            <Button
-              variant="outline"
-              onClick={signOut}
-              className="w-full"
-              size="sm"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
           </div>
-        )}
-        {collapsed && (
-          <Button
-            variant="outline"
-            onClick={signOut}
-            size="sm"
-            className="w-full"
-          >
-            <LogOut className="w-4 h-4" />
-          </Button>
         )}
       </SidebarFooter>
     </Sidebar>

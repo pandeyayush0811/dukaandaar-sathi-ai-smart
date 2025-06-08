@@ -1,99 +1,30 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Edit2, Save, X } from "lucide-react";
-import { useAuth } from "@/components/AuthProvider";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const UserProfile = () => {
-  const { user } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    full_name: "",
-    shop_name: "",
-    phone: "",
-    address: ""
+    email: "shop@example.com",
+    full_name: "Shop Owner",
+    shop_name: "My Shop",
+    phone: "+91 9876543210",
+    address: "Shop Address, City, State"
   });
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
-
-  const fetchProfile = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user?.id)
-        .single();
-
-      if (error && error.code !== "PGRST116") {
-        throw error;
-      }
-
-      if (data) {
-        setProfile({
-          full_name: data.full_name || "",
-          shop_name: data.shop_name || "",
-          phone: data.phone || "",
-          address: data.address || ""
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-    } finally {
-      setLoading(false);
-    }
+  const updateProfile = () => {
+    toast({
+      title: "Profile updated",
+      description: "Your profile has been updated successfully.",
+    });
+    setIsEditing(false);
   };
-
-  const updateProfile = async () => {
-    try {
-      const { error } = await supabase
-        .from("profiles")
-        .upsert({
-          id: user?.id,
-          ...profile,
-          updated_at: new Date().toISOString()
-        });
-
-      if (error) throw error;
-
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully.",
-      });
-      setIsEditing(false);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update profile. Please try again.",
-        variant: "destructive",
-      });
-      console.error("Error updating profile:", error);
-    }
-  };
-
-  if (loading) {
-    return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card>
@@ -135,9 +66,10 @@ const UserProfile = () => {
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
-            value={user?.email || ""}
-            disabled
-            className="bg-gray-50"
+            value={profile.email}
+            onChange={(e) => setProfile({...profile, email: e.target.value})}
+            disabled={!isEditing}
+            placeholder="Enter your email"
           />
         </div>
 
