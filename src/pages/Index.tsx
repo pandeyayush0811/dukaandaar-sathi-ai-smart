@@ -1,18 +1,7 @@
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  BarChart3, 
-  Package, 
-  ShoppingCart, 
-  TrendingUp, 
-  AlertTriangle, 
-  Scan,
-  Plus,
-  User
-} from "lucide-react";
+import { Scan, Plus } from "lucide-react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import Dashboard from "@/components/Dashboard";
 import ProductManagement from "@/components/ProductManagement";
@@ -21,6 +10,7 @@ import ImprovedBarcodeScanner from "@/components/ImprovedBarcodeScanner";
 import ReportsView from "@/components/ReportsView";
 import UserProfile from "@/components/UserProfile";
 import { AppSidebar } from "@/components/AppSidebar";
+import AlertsView from "@/components/AlertsView";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -43,27 +33,7 @@ const Index = () => {
       case "profile":
         return <UserProfile />;
       case "alerts":
-        return (
-          <div className="space-y-4">
-            <Card className="border-orange-200 bg-orange-50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-orange-800">
-                  <AlertTriangle className="w-5 h-5" />
-                  Stock Alerts
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-orange-200">
-                  <div>
-                    <p className="font-medium text-gray-900">Low stock items will appear here</p>
-                    <p className="text-sm text-gray-600">Add products to see alerts</p>
-                  </div>
-                  <Badge variant="secondary">Coming Soon</Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        );
+        return <AlertsView />;
       default:
         return <Dashboard />;
     }
@@ -75,50 +45,54 @@ const Index = () => {
         <AppSidebar activeTab={activeTab} onTabChange={setActiveTab} />
         
         <div className="flex-1 flex flex-col">
-          {/* Header */}
+          {/* Mobile-optimized Header */}
           <div className="bg-white shadow-sm border-b sticky top-0 z-10">
-            <div className="px-6 py-4">
+            <div className="px-3 sm:px-6 py-3 sm:py-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 sm:space-x-4">
                   <SidebarTrigger />
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
-                      <Package className="w-5 h-5 text-white" />
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
+                      <div className="w-3 h-3 sm:w-5 sm:h-5 bg-white rounded-sm"></div>
                     </div>
-                    <div>
-                      <h1 className="text-xl font-bold text-gray-900">DukaanBuddy</h1>
+                    <div className="hidden sm:block">
+                      <h1 className="text-lg sm:text-xl font-bold text-gray-900">DukaanBuddy</h1>
                       <p className="text-xs text-gray-600">आपका स्मार्ट दुकान साथी</p>
+                    </div>
+                    <div className="sm:hidden">
+                      <h1 className="text-base font-bold text-gray-900">DukaanBuddy</h1>
                     </div>
                   </div>
                 </div>
                 
                 <Button 
                   onClick={() => setShowScanner(true)}
-                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg"
-                  size="lg"
+                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg text-xs sm:text-sm px-3 sm:px-4 py-2 h-8 sm:h-10"
+                  size="sm"
                 >
-                  <Scan className="w-5 h-5 mr-2" />
-                  Scan Product
+                  <Scan className="w-4 h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Scan Product</span>
+                  <span className="sm:hidden">Scan</span>
                 </Button>
               </div>
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-3 sm:p-4 lg:p-6 pb-20 sm:pb-6">
             <div className="max-w-7xl mx-auto">
               {renderTabContent()}
             </div>
           </div>
 
-          {/* Quick Action FAB */}
-          <div className="fixed bottom-6 right-6">
+          {/* Mobile FAB */}
+          <div className="fixed bottom-4 right-4 sm:hidden">
             <Button 
               onClick={() => setShowScanner(true)}
               size="lg"
-              className="w-16 h-16 rounded-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg"
+              className="w-14 h-14 rounded-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg"
             >
-              <Plus className="w-8 h-8" />
+              <Plus className="w-6 h-6" />
             </Button>
           </div>
         </div>
