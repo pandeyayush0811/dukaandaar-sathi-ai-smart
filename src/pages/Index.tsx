@@ -23,7 +23,7 @@ const Index = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard onTabChange={setActiveTab} onShowScanner={() => setShowScanner(true)} />;
       case "products":
         return <ProductManagement />;
       case "billing":
@@ -35,7 +35,7 @@ const Index = () => {
       case "alerts":
         return <AlertsView />;
       default:
-        return <Dashboard />;
+        return <Dashboard onTabChange={setActiveTab} onShowScanner={() => setShowScanner(true)} />;
     }
   };
 

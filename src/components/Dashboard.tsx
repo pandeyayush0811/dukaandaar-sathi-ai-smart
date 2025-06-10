@@ -11,7 +11,40 @@ import {
   AlertCircle
 } from "lucide-react";
 
-const Dashboard = () => {
+interface DashboardProps {
+  onTabChange?: (tab: string) => void;
+  onShowScanner?: () => void;
+}
+
+const Dashboard = ({ onTabChange, onShowScanner }: DashboardProps) => {
+  const handleAddProduct = () => {
+    console.log("Add Product clicked");
+    if (onTabChange) {
+      onTabChange("products");
+    }
+  };
+
+  const handleNewSale = () => {
+    console.log("New Sale clicked");
+    if (onTabChange) {
+      onTabChange("billing");
+    }
+  };
+
+  const handleViewReports = () => {
+    console.log("View Reports clicked");
+    if (onTabChange) {
+      onTabChange("reports");
+    }
+  };
+
+  const handleCustomerList = () => {
+    console.log("Customer List clicked");
+    if (onTabChange) {
+      onTabChange("profile");
+    }
+  };
+
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Welcome Section */}
@@ -77,19 +110,35 @@ const Dashboard = () => {
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <Button variant="outline" className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2">
+            <Button 
+              variant="outline" 
+              className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2"
+              onClick={handleAddProduct}
+            >
               <Package className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
               Add Product
             </Button>
-            <Button variant="outline" className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2">
+            <Button 
+              variant="outline" 
+              className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2"
+              onClick={handleNewSale}
+            >
               <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
               New Sale
             </Button>
-            <Button variant="outline" className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2">
+            <Button 
+              variant="outline" 
+              className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2"
+              onClick={handleViewReports}
+            >
               <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
               View Reports
             </Button>
-            <Button variant="outline" className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2">
+            <Button 
+              variant="outline" 
+              className="h-16 sm:h-20 flex-col text-xs sm:text-sm p-2"
+              onClick={handleCustomerList}
+            >
               <Users className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
               Customer List
             </Button>
